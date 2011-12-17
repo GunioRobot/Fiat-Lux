@@ -10,7 +10,7 @@ using namespace xenon::graphics;
 #include <GL/gl.h>
 #include <GL/glu.h>
 #include <GL/glext.h>
-#endif 
+#endif
 
 // ==============================================================
 // this license below is from freeGlut, (freeglut_font_data.c)
@@ -40,7 +40,7 @@ using namespace xenon::graphics;
  *
  * Copyright (c) 1999-2000 by Pawel W. Olszta
  * Written by Pawel W. Olszta, <olszta@sourceforge.net>
- * 
+ *
  * Permission is hereby granted, free of charge, to any person obtaining a
  * copy of this software and associated documentation files (the "Software"),
  * to deal in the Software without restriction, including without limitation
@@ -352,7 +352,7 @@ void xenon::graphics::drawBitmapString(std::string textString, float x, float y)
   glPixelStorei( GL_UNPACK_SKIP_ROWS,   0        );
   glPixelStorei( GL_UNPACK_SKIP_PIXELS, 0        );
   glPixelStorei( GL_UNPACK_ALIGNMENT,   1        );
-  
+
   int len = (int)textString.length();
   float yOffset = 0;
   float fontSize = 8.0f;

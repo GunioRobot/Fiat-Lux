@@ -79,7 +79,7 @@ void pong_render(void *ctx, float time)
 	if (ltime == -1)
 		ftime = 0;
 	ltime = time;
-	
+
 	bx += ftime*bdx;
 	by += ftime*bdy;
 
@@ -111,7 +111,7 @@ void pong_render(void *ctx, float time)
 		p2 = HEIGHT-PH;
 
 	olLog("%f %10f %10f %10f %10f %10f %10f\n", p1, p2, r1, r2, p1fac, p2fac, bx);
-	
+
 	if (bx <= 0) {
 		if (by < p1-BH || by > p1+PH) {
 			if (bx < -BW) {
@@ -145,7 +145,7 @@ void pong_render(void *ctx, float time)
 	bdx *= powf(1.2, ftime);
 	bdy *= powf(1.2, ftime);
 
-	
+
 
 	olLoadIdentity();
 
@@ -160,7 +160,7 @@ void pong_render(void *ctx, float time)
 
 	olTranslate(0, TOP - 0.13);
 	olScale(1, -1);
-	
+
 	char buf[10];
 	sprintf(buf, "%d", score1);
 	olDrawString(olGetDefaultFont(), LEFT, 0, 0.15, C_WHITE, buf);

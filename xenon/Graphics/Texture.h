@@ -7,7 +7,7 @@
 //
 // Note: This file was adapted from the OpenFrameworks open source
 // project, and may be subject to additional licensing restrictions.
-// 
+//
 //    http://www.openframeworks.cc/
 //
 // __END_LICENSE__
@@ -23,11 +23,11 @@
 #else // Linux
 #include <GL/gl.h>
 #include <GL/glu.h>
-#endif 
+#endif
 
 namespace xenon {
 namespace graphics {
-  
+
   class XenonDrawable {
   public:
     virtual ~XenonDrawable(){}
@@ -35,7 +35,7 @@ namespace graphics {
     virtual void draw(float x,float y,float w, float h)=0;
     virtual float getHeight()=0;
     virtual float getWidth()=0;
-    
+
     virtual void setAnchorPercent(float xPct, float yPct){};
     virtual void setAnchorPoint(float x, float y){};
     virtual void resetAnchor(){};
@@ -82,7 +82,7 @@ namespace graphics {
     // -----------------------------------------------------------------------
 
     //uses the currently set texture type - default ARB texture
-    void allocate(int w, int h, int internalGlDataType); 
+    void allocate(int w, int h, int internalGlDataType);
     void clear();
 
     void loadData(void * data, int w, int h, int format, int type);
@@ -100,13 +100,13 @@ namespace graphics {
     //for the advanced user who wants to draw textures in their own way
     void bind();
     void unbind();
-	
-    // these are helpers to allow you to get points for the texture ala "glTexCoordf" 
-    // but are texture type independent. 
+
+    // these are helpers to allow you to get points for the texture ala "glTexCoordf"
+    // but are texture type independent.
     // use them for immediate or non immediate mode
-    xenon::Vector2 getCoordFromPoint(float xPos, float yPos);		
-    xenon::Vector2 getCoordFromPercent(float xPts, float yPts);		
-	
+    xenon::Vector2 getCoordFromPoint(float xPos, float yPos);
+    xenon::Vector2 getCoordFromPercent(float xPts, float yPts);
+
     void setTextureWrap(GLint wrapModeHorizontal, GLint wrapModeVertical);
     void setTextureMinMagFilter(GLint minFilter, GLint maxFilter);
 

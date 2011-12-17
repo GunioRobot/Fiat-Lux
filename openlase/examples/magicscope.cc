@@ -8,7 +8,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-#include <iostream.h> 
+#include <iostream.h>
 using namespace std;
 
 #include <jack/jack.h>
@@ -72,7 +72,7 @@ MagicScope::MagicScope(std::string name) : m_sample_rate(0), m_buffer_size(0) {
   gettimeofday(&starttime, NULL);
   nextSwitch = 0;
 
-/*  
+/*
   sample_t currentWave [512];
   sample_t nextWave [512];
 	for (int frm = 0; frm < 512; frm++) {
@@ -118,9 +118,9 @@ int MagicScope::process_callback (nframes_t nframes)
   	}
     nextSwitch += interval;
   }
-  
+
   float fracComplete = (timeElapsed - (nextSwitch - interval)) / interval;
-  
+
   printf("Frac Complete: %.3f\n",fracComplete);
 
   // old "circlescope" code

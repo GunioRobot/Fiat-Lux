@@ -296,7 +296,7 @@ int main (int argc, char *argv[])
 	nodelay(stdscr, TRUE);
 
 	int wh = (LINES - WINSTART)/2;
-	
+
 	attron(A_BOLD);
 	render_win = newwin(wh-1, COLS, WINSTART + 1, 0);
 	scrollok(render_win, TRUE);
@@ -376,7 +376,7 @@ int main (int argc, char *argv[])
 				case 'q':
 					done = 1;
 			}
-			
+
 		}
 
 		cur_win = render_win;

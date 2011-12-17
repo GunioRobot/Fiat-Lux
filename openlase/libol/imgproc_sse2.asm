@@ -101,7 +101,7 @@ INIT_XMM
     movdqa m%5, %10
     SBUTTERFLY qdq, %5, %6, %2
     SBUTTERFLY qdq, %3, %4, %2
-    SBUTTERFLY qdq, %7, %8, %2	
+    SBUTTERFLY qdq, %7, %8, %2
     SWAP %3, %5
     SWAP %4, %6
 %if %0<11

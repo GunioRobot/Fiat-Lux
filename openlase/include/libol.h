@@ -55,16 +55,16 @@ typedef struct {
   float off_speed;  // Speed the laser moves when it is off, mesaure
                     // in screen distance per point.
   int start_wait;
-  int start_dwell;  // Number of samples to dwell at the beginning of each point or path.  
+  int start_dwell;  // Number of samples to dwell at the beginning of each point or path.
   int curve_dwell;  // Number of samples to dwell if dot > curve_angle
   int corner_dwell; // Number of samples to dwell in the corner of an object
   int end_dwell;    // Number of samples to dwell at the end of each point or bath by olEnd()
   int end_wait;
   float curve_angle;
   float flatness;   // Determines when to subdivide bezier curves
-  float snap;       
+  float snap;
   int render_flags;
-  int min_length;   // Minimum length (in points) for a path to be drawn. 
+  int min_length;   // Minimum length (in points) for a path to be drawn.
   int max_framelen;
 } OLRenderParams;
 

@@ -29,7 +29,7 @@ double xenon::xenon_time() {
 // ---------------------------------------------------------------------
 
 xenon::XenonTime::XenonTime() {
-  m_time = 0;    
+  m_time = 0;
   m_last_time = xenon::Stopwatch::microtime();
 }
 

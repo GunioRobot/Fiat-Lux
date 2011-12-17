@@ -42,22 +42,22 @@ QVariant ControlPoint::itemChange(GraphicsItemChange change, const QVariant &val
 OutputSettings::OutputSettings(QWidget *parent)
 {
 	setupUi(this);
-	
+
 	QPen grid_pen(Qt::blue);
 	QPen line_pen(Qt::green);
 	QBrush point_brush(Qt::red);
-	
+
 	scene.setSceneRect(-1.1,-1.1,2.2,2.2);
-	
+
 	for (int i=-5; i<=5; i++) {
 		scene.addLine(i/5.0f, -1.0f, i/5.0f, 1.0f, grid_pen);
 		scene.addLine(-1.0f, i/5.0f, 1.0f, i/5.0f, grid_pen);
 	}
-	
+
 	for (int i=0; i<4; i++) {
 		pt[i] = new ControlPoint();
 	}
-	
+
 	for (int i=0; i<4; i++) {
 		pt[i]->setBrush(point_brush);
 		pt[i]->setRect(-5, -5, 10, 10);
@@ -67,7 +67,7 @@ OutputSettings::OutputSettings(QWidget *parent)
 		pt[i]->form = this;
 		scene.addItem(pt[i]);
 	}
-	
+
 	pl.setPen(line_pen);
 
 	scene.addItem(&pl);
@@ -112,14 +112,14 @@ void OutputSettings::updateMatrix()
 	QTransform smtx;
 	QTransform omtx;
 	qreal yratio = getYRatio(aspectRatio->currentIndex());
-	
+
 	if (!aspectScale->isChecked()) {
 		if (fitSquare->isChecked())
 			smtx.scale(yratio, 1.0);
 		else
 			smtx.scale(1.0, 1/yratio);
 	}
-	
+
 	omtx = smtx * mtx;
 
 	cfg.transform[0][0] = omtx.m11();
@@ -170,7 +170,7 @@ void OutputSettings::pointMoved(ControlPoint *point)
 void OutputSettings::updatePoly()
 {
 	QPolygonF poly;
-	
+
 	poly << pt[0]->pos() << pt[1]->pos() << pt[3]->pos() << pt[2]->pos();
 	pl.setPolygon(poly);
 }
@@ -191,7 +191,7 @@ void OutputSettings::updateAllSettings()
 	cfg.offset = offsetSlider->value() / 100.0f;
 	cfg.size = sizeSlider->value() / 100.0f;
 	cfg.delay = delaySlider->value();
-	
+
 	cfg.scan_flags = 0;
 	cfg.blank_flags = 0;
 	cfg.safe = enforceSafety->isChecked();
@@ -201,10 +201,10 @@ void OutputSettings::updateAllSettings()
 		yEnable->setChecked(true);
 		cfg.scan_flags |= ENABLE_X | ENABLE_Y;
 	}
-	
+
 	xEnable->setEnabled(!cfg.safe);
 	yEnable->setEnabled(!cfg.safe);
-	
+
 	currentAspect = aspectRatio->currentIndex();
 
 	if (xEnable->isChecked())
@@ -234,19 +234,19 @@ void OutputSettings::resetDefaults()
 	yInvert->setChecked(false);
 	xySwap->setChecked(false);
 	aspectScale->setChecked(false);
-	
+
 	enforceSafety->setChecked(true);
-	
+
 	aspectRatio->setCurrentIndex(ASPECT_1_1);
 
 	outputEnable->setChecked(true);
 	blankingEnable->setChecked(true);
-	
+
 	powerSlider->setValue(100);
 	offsetSlider->setValue(20);
 	sizeSlider->setValue(100);
 	delaySlider->setValue(6);
-	
+
 	resetPoints();
 	updateAllSettings();
 }
@@ -330,10 +330,10 @@ void OutputSettings::on_aspectRatio_currentIndexChanged(int index)
 
 	qreal rold = getYRatio(currentAspect);
 	qreal rnew = getYRatio(index);
-	
+
 	smtx.scale(1.0, rnew/rold);
 	mtx = smtx * mtx;
-	
+
 	currentAspect = index;
 	loadPoints();
 	updateMatrix();
@@ -359,16 +359,16 @@ void OutputSettings::on_enforceSafety_toggled(bool state)
 			return;
 		}
 	}
-	
+
 	if (state) {
 		xEnable->setChecked(true);
 		yEnable->setChecked(true);
 		cfg.scan_flags |= ENABLE_X | ENABLE_Y;
 	}
-	
+
 	xEnable->setEnabled(!state);
 	yEnable->setEnabled(!state);
-	
+
 	cfg.safe = state;
 }
 

@@ -71,7 +71,7 @@ void Texture::clear(){
   if (texData.textureID != 0){
     glDeleteTextures(1, (GLuint *)&texData.textureID);
   }
-  
+
   texData.bAllocated = false;
 }
 
@@ -86,7 +86,7 @@ void Texture::allocate(int w, int h, int internalGlDataType){
 //     texData.tex_t = w;
 //     texData.tex_u = h;
 //     texData.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
-//   } else 
+//   } else
 // #endif
     {
       //otherwise we need to calculate the next power of 2 for the requested dimensions
@@ -97,34 +97,34 @@ void Texture::allocate(int w, int h, int internalGlDataType){
       texData.tex_u = 1.0f;
       texData.textureTarget = GL_TEXTURE_2D;
     }
-  
+
   texData.glTypeInternal = internalGlDataType;
 
-	
+
   // MEMO: todo, add more types
   switch(texData.glTypeInternal) {
-#ifndef TARGET_OPENGLES	
+#ifndef TARGET_OPENGLES
   case GL_RGBA32F_ARB:
     texData.glType		= GL_RGBA;
     texData.pixelType	= GL_FLOAT;
     break;
-    
+
   case GL_RGB32F_ARB:
     texData.glType		= GL_RGB;
     texData.pixelType	= GL_FLOAT;
     break;
-    
+
   case GL_LUMINANCE32F_ARB:
     texData.glType		= GL_LUMINANCE;
     texData.pixelType	= GL_FLOAT;
     break;
-#endif			
-    
+#endif
+
   default:
     texData.glType		= GL_LUMINANCE;
     texData.pixelType	= GL_UNSIGNED_BYTE;
   }
-  
+
   // attempt to free the previous bound texture, if we can:
   clear();
 
@@ -134,7 +134,7 @@ void Texture::allocate(int w, int h, int internalGlDataType){
 
   glBindTexture(texData.textureTarget, (GLuint)texData.textureID);
 #ifndef TARGET_OPENGLES
-  // can't do this on OpenGL ES: on full-blown OpenGL, 
+  // can't do this on OpenGL ES: on full-blown OpenGL,
   // internalGlDataType and glDataType (GL_LUMINANCE below)
   // can be different; on ES they must be exactly the same.
   //glTexImage2D(texData.textureTarget, 0, texData.glTypeInternal, (GLint)texData.tex_w, (GLint)texData.tex_h, 0, GL_LUMINANCE, PIXEL_TYPE, 0);  // init to black...
@@ -143,14 +143,14 @@ void Texture::allocate(int w, int h, int internalGlDataType){
   glTexImage2D(texData.textureTarget, 0, texData.glTypeInternal, texData.tex_w, texData.tex_h, 0, texData.glTypeInternal, GL_UNSIGNED_BYTE, 0);
 #endif
 
-  
+
   glTexParameterf(texData.textureTarget, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
   glTexParameterf(texData.textureTarget, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
   glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
   glTexParameterf(texData.textureTarget, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-  
+
   glTexEnvf(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
-  
+
   glDisable(texData.textureTarget);
 
   texData.width = w;
@@ -165,7 +165,7 @@ void Texture::allocate(int w, int h, int internalGlDataType){
 
 //----------------------------------------------------------
 void Texture::loadData(void * data, int w, int h, int format, int type){
-  
+
   //	can we allow for uploads bigger then texture and
   //	just take as much as the texture can?
   //
@@ -174,23 +174,23 @@ void Texture::loadData(void * data, int w, int h, int format, int type){
   //	int uploadH = MIN(h, tex_h);
   //  but with a "step" size of w?
   // 	check "glTexSubImage2D"
-  
+
   if ( w > texData.tex_w || h > texData.tex_h) {
     xenon_out(ErrorMessage) << "image data too big for allocated texture. not uploading...";
     return;
   }
-  
+
   //update our size with the new dimensions - this should be the same size or smaller than the allocated texture size
   texData.width 	= w;
   texData.height 	= h;
   texData.glType  = format;
-  
+
   //compute new tex co-ords based on the ratio of data's w, h to texture w,h;
-#ifndef TARGET_OF_IPHONE	
+#ifndef TARGET_OF_IPHONE
   if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
     texData.tex_t = w;
     texData.tex_u = h;
-  } else 
+  } else
 #endif
     {
       texData.tex_t = (float)(w) / (float)texData.tex_w;
@@ -265,7 +265,7 @@ void Texture::loadScreenData(int x, int y, int w, int h){
   if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
     texData.tex_t = (float)(w);
     texData.tex_u = (float)(h);
-  } else 
+  } else
 #endif
     {
       texData.tex_t = (float)(w) / (float)texData.tex_w;
@@ -302,7 +302,7 @@ void Texture::resetAnchor(){
 
 //----------------------------------------------------------
 void Texture::bind(){
-  //we could check if it has been allocated - but we don't do that in draw() 
+  //we could check if it has been allocated - but we don't do that in draw()
   glEnable(texData.textureTarget);
   glBindTexture( texData.textureTarget, (GLuint)texData.textureID);
 }
@@ -315,56 +315,56 @@ void Texture::unbind(){
 
 //----------------------------------------------------------
 Vector2 Texture::getCoordFromPoint(float xPos, float yPos){
-	
+
   Vector2 temp;
-	
+
   if (!bAllocated()) return temp;
-	
-	
+
+
   if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
-		
+
     temp = Vector2(xPos, yPos);
-		
+
   } else {
-		
-    // non arb textures are 0 to 1, so we 
-    // (a) convert to a pct: 
-		
+
+    // non arb textures are 0 to 1, so we
+    // (a) convert to a pct:
+
     float pctx = xPos / texData.width;
     float pcty = yPos / texData.height;
-		
+
     // (b) mult by our internal pct (since we might not be 0-1 insternally)
-		
+
     pctx *= texData.tex_t;
     pcty *= texData.tex_u;
-		
+
     temp = Vector2(pctx, pcty);
 
   }
-	
+
   return temp;
-	
+
 }
 
 //----------------------------------------------------------
 Vector2 Texture::getCoordFromPercent(float xPct, float yPct){
-	
+
   Vector2 temp;
-	
+
   if (!bAllocated()) return temp;
-	
+
   if (texData.textureTarget == GL_TEXTURE_RECTANGLE_ARB){
-		
+
     temp = Vector2(xPct * texData.width, yPct * texData.height);
-    
+
   } else {
-    
+
     xPct *= texData.tex_t;
     yPct *= texData.tex_u;
     temp = Vector2(xPct, yPct);
-    
+
   }
-  
+
   return temp;
 }
 
@@ -449,9 +449,9 @@ void Texture::draw(float x, float y, float w, float h){
   GLfloat tx1 = texData.tex_t - offsetw;
   GLfloat ty1 = texData.tex_u - offseth;
 
-  glPushMatrix(); 	
+  glPushMatrix();
   glTranslatef(x,y,0.0f);
-		
+
   GLfloat tex_coords[] = {
     tx0,ty0,
     tx1,ty0,
@@ -464,10 +464,10 @@ void Texture::draw(float x, float y, float w, float h){
     px1,py1,
     px0,py1
   };
-		
+
   glEnableClientState( GL_TEXTURE_COORD_ARRAY );
   glTexCoordPointer(2, GL_FLOAT, 0, tex_coords );
-  glEnableClientState(GL_VERTEX_ARRAY);		
+  glEnableClientState(GL_VERTEX_ARRAY);
   glVertexPointer(2, GL_FLOAT, 0, verts );
   glDrawArrays( GL_TRIANGLE_FAN, 0, 4 );
   glDisableClientState( GL_TEXTURE_COORD_ARRAY );

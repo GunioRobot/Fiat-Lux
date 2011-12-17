@@ -13,14 +13,14 @@ namespace lux {
 
   // Light-weight wrapper for the Jack audio library.
   class AudioClient {
-  
+
     jack_client_t* m_client;
 
   protected:
     nframes_t m_sample_rate;
     nframes_t m_buffer_size;
     std::map<std::string, jack_port_t*> m_ports;
-    
+
   public:
 
     // Each instance is a "client" that is registered with Jack.

@@ -31,7 +31,7 @@ std::string prefix_from_filename(std::string const& filename);
 class VectorSpaceDimension {
 
   // Class enums
-  enum ControlTyxenon  { eAutomation, eController }; 
+  enum ControlTyxenon  { eAutomation, eController };
 
   // Class private members
   std::string m_name;
@@ -44,14 +44,14 @@ class VectorSpaceDimension {
 
   bool m_read_only;             // true if the parameter is read-only
 
-  ControlTyxenon m_control_mode;   // [ automation, controller ] 
+  ControlTyxenon m_control_mode;   // [ automation, controller ]
 
   float m_controller_timeout;   // Amount of time (seconds) left
                                 // before automation can
                                 // resume. Counts down to zero.
   double m_last_poll_time;
 
-  
+
   // Sets the actual value of the parameter, clamping to the limits if
   // necessary.
   void set_internal(double val);
@@ -59,7 +59,7 @@ class VectorSpaceDimension {
 public:
 
   VectorSpaceDimension(std::string name, std::string description,
-                       double default_value, bool read_only); 
+                       double default_value, bool read_only);
 
   // Return the name
   std::string name() const { return m_name; }
@@ -90,7 +90,7 @@ public:
   void automate();
 
   // Get the current value for a parameter
-  // 
+  //
   // Can be overriden by a subclass to, e.g., return an interpolated
   // or animated value.
   virtual double operator()();
@@ -106,9 +106,9 @@ class XenonParameters {
   xenon::Mutex m_mutex;
 
 public:
-  void add_parameter(std::string name, 
-                     bool read_only, 
-                     float default_value, 
+  void add_parameter(std::string name,
+                     bool read_only,
+                     float default_value,
                      std::string description);
 
   void set_value(std::string name, float val);

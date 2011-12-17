@@ -6,7 +6,7 @@ using namespace xenon;
 
 lux::OutputEngine::OutputEngine(std::string const& jack_endpoint_name) :
   AudioClient(jack_endpoint_name) {
-  
+
   // Set up endpoints, and connect them to the system audio input.
   this->add_input_port("in_x");
   this->add_input_port("in_y");
@@ -98,11 +98,11 @@ void lux::OutputEngine::generate_enable(sample_t *buf, nframes_t nframes) {
 void lux::OutputEngine::transform(sample_t *ox, sample_t *oy) {
   float x = *ox;
   float y = *oy;
-  
+
   *ox = m_transform_matrix(0,0)*x + m_transform_matrix(0,1)*y + m_transform_matrix(0,2);
   *oy = m_transform_matrix(1,0)*x + m_transform_matrix(1,1)*y + m_transform_matrix(1,2);
   float w = m_transform_matrix(2,0)*x + m_transform_matrix(2,1)*y + m_transform_matrix(2,2);
-  
+
   *ox /= w;
   *oy /= w;
 }
@@ -120,7 +120,7 @@ static void cfilter(float *c, float *p)
   } else {
     *p = (1-RATIO) * *p + RATIO * *c;
   }
-  
+
   *c += *c - *p;
 }
 
@@ -131,7 +131,7 @@ static void dfilter(float *c, float *p)
 {
   float delta = *c - *p;
   *c += DPOWER*delta;
-  
+
   *p = (1-DRATIO) * *p + DRATIO * *c;
 }
 
@@ -178,15 +178,15 @@ int lux::OutputEngine::process_callback(nframes_t nframes) {
       m_calibration_time = 0;
     for (nframes_t frm = 0; frm < nframes; frm++) {
       m_calibration_time += time_per_sample;
-      *o_x++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time * 
+      *o_x++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time *
                                                 m_preamp_calibration_frequency) + m_preamp_calibration_offset);
-      *o_y++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time * 
+      *o_y++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time *
                                                 m_preamp_calibration_frequency) + m_preamp_calibration_offset);
-      *o_r++ = m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time * 
+      *o_r++ = m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time *
                                     m_preamp_calibration_frequency) * 0.5 + m_preamp_calibration_offset;
-      *o_g++ = m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time * 
+      *o_g++ = m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time *
                                     m_preamp_calibration_frequency) * 0.5 + m_preamp_calibration_offset;
-      *o_b++ = m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time * 
+      *o_b++ = m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time *
                                     m_preamp_calibration_frequency) * 0.5  + m_preamp_calibration_offset;
     }
 
@@ -198,15 +198,15 @@ int lux::OutputEngine::process_callback(nframes_t nframes) {
 
     for (nframes_t frm = 0; frm < nframes; frm++) {
       m_calibration_time += time_per_sample;
-      *o_x++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time * 
+      *o_x++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time *
                                                 m_laser_calibration_x_frequency) + m_preamp_calibration_offset);
-      *o_y++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time * 
+      *o_y++ = (m_preamp_calibration_gain * cos(2 * M_PI * m_calibration_time *
                                                 m_laser_calibration_y_frequency) + m_preamp_calibration_offset);
       *o_r++ = m_laser_calibration_red_intensity;
       *o_g++ = m_laser_calibration_green_intensity;
       *o_b++ = m_laser_calibration_blue_intensity;
     }
-    
+
   }  else {
 
     for (nframes_t frm = 0; frm < nframes; frm++) {
@@ -221,12 +221,12 @@ int lux::OutputEngine::process_callback(nframes_t nframes) {
       // ---------------------
       // Adjustments to X & Y
       // ---------------------
-    
+
       // Apply affine transformation
       y = -y;
       this->transform(&x, &y);
       y = -y;
-    
+
       // Swap, or invert X & Y
       if (m_swap_xy) {
         sample_t tmp = x;
@@ -253,11 +253,11 @@ int lux::OutputEngine::process_callback(nframes_t nframes) {
       if (y > 1.0) y = 1.0;
       if (y < -1.0) y = -1.0;
 
-      // Run the openlase filters 
+      // Run the openlase filters
       //
       // **** TODO: What does this do??
       filter(&x, &y);
-    
+
       *o_x++ = x;
       *o_y++ = y;
 
@@ -333,91 +333,91 @@ int lux::OutputEngine::sample_rate_callback(nframes_t nframes) {
   m_dead_time = (m_sample_rate/10);
 }
 
-void lux::OutputEngine::setSizeMultiplier(float value) { 
+void lux::OutputEngine::setSizeMultiplier(float value) {
   if (value >= 0.0 && value < 2.0) {  // A little safety check
-    m_size_multiplier = value; 
+    m_size_multiplier = value;
   } else {
     xenon_out() << "WARNING: Tried to set size multiplier to invalid value.  Value was " << value << "\n";
   }
 }
 
-void lux::OutputEngine::redIntensityMultiplier(float value) { 
+void lux::OutputEngine::redIntensityMultiplier(float value) {
   if (value >= 0.0 && value <= 1.0) {  // A little safety check
-    m_red_intensity_multiplier = value; 
+    m_red_intensity_multiplier = value;
   } else {
-    xenon_out() << "WARNING: Tried to set red intensity multiplier to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set red intensity multiplier to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::greenIntensityMultiplier(float value) { 
+void lux::OutputEngine::greenIntensityMultiplier(float value) {
   if (value >= 0.0 && value <= 1.0) {  // A little safety check
-    m_green_intensity_multiplier = value; 
+    m_green_intensity_multiplier = value;
   } else {
-    xenon_out() << "WARNING: Tried to set green intensity multiplier to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set green intensity multiplier to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::blueIntensityMultiplier(float value) { 
+void lux::OutputEngine::blueIntensityMultiplier(float value) {
   if (value >= 0.0 && value <= 1.0) {  // A little safety check
-    m_blue_intensity_multiplier = value; 
+    m_blue_intensity_multiplier = value;
   } else {
-    xenon_out() << "WARNING: Tried to set blue intensity multiplier to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set blue intensity multiplier to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::redIntensityOffset(float value) { 
+void lux::OutputEngine::redIntensityOffset(float value) {
   if (value >= -1.0 && value <= 1.0) {  // A little safety check
-    m_red_intensity_offset = value; 
+    m_red_intensity_offset = value;
   } else {
-    xenon_out() << "WARNING: Tried to set red intensity offset to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set red intensity offset to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::greenIntensityOffset(float value) { 
+void lux::OutputEngine::greenIntensityOffset(float value) {
   if (value >= -1.0 && value <= 1.0) {  // A little safety check
-    m_green_intensity_offset = value; 
+    m_green_intensity_offset = value;
   } else {
-    xenon_out() << "WARNING: Tried to set green intensity offset to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set green intensity offset to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::blueIntensityOffset(float value) { 
+void lux::OutputEngine::blueIntensityOffset(float value) {
   if (value >= -1.0 && value <= 1.0) {  // A little safety check
-    m_blue_intensity_offset = value; 
+    m_blue_intensity_offset = value;
   } else {
-    xenon_out() << "WARNING: Tried to set blue intensity offset to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set blue intensity offset to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::redIntensityGamma(float value) { 
+void lux::OutputEngine::redIntensityGamma(float value) {
   if (value >= 0.0 && value <= 2.0) {  // A little safety check
-    m_red_intensity_gamma = value; 
+    m_red_intensity_gamma = value;
   } else {
-    xenon_out() << "WARNING: Tried to set red intensity gamma to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set red intensity gamma to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::greenIntensityGamma(float value) { 
+void lux::OutputEngine::greenIntensityGamma(float value) {
   if (value >= 0.0 && value <= 2.0) {  // A little safety check
-    m_green_intensity_gamma = value; 
+    m_green_intensity_gamma = value;
   } else {
-    xenon_out() << "WARNING: Tried to set green intensity gamma to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set green intensity gamma to invalid value.  Value was "
                 << value << "\n";
   }
 }
 
-void lux::OutputEngine::blueIntensityGamma(float value) { 
+void lux::OutputEngine::blueIntensityGamma(float value) {
   if (value >= 0.0 && value <= 2.0) {  // A little safety check
-    m_blue_intensity_gamma = value; 
+    m_blue_intensity_gamma = value;
   } else {
-    xenon_out() << "WARNING: Tried to set blue intensity gamma to invalid value.  Value was " 
+    xenon_out() << "WARNING: Tried to set blue intensity gamma to invalid value.  Value was "
                 << value << "\n";
   }
 }

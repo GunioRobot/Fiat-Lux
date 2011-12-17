@@ -26,16 +26,16 @@ namespace lux {
     // Aubio data structure and storage
 
     smpl_t m_threshold;
-    smpl_t m_silence;  
+    smpl_t m_silence;
     uint_t m_median;
-  
+
     fvec_t* m_ibuf;
     fvec_t* m_tempobuf;
     cvec_t* m_fftgrain;
     fvec_t* m_onset_kl;
     fvec_t* m_onset_complex;
     aubio_mfft_t *m_mfft;
-    
+
     aubio_pvoc_t *m_phase_vocoder;
     aubio_pitchdetection_t *m_pitch_detection;
     aubio_pickpeak_t *m_peak_picker;
@@ -49,7 +49,7 @@ namespace lux {
     // arrays in python.
     boost::circular_buffer<float> m_left_buffer;
     boost::circular_buffer<float> m_right_buffer;
-    boost::circular_buffer<float> m_avg_buffer;    
+    boost::circular_buffer<float> m_avg_buffer;
     boost::circular_buffer<int> m_onset_buffer;
     boost::circular_buffer<float> m_pitch_buffer;
     boost::circular_buffer<int> m_tempo_tactus_buffer;
@@ -68,7 +68,7 @@ namespace lux {
     }
 
   public:
-    
+
     AudioEngine(std::string const& jack_endpoint_name);
     virtual ~AudioEngine();
 
@@ -79,7 +79,7 @@ namespace lux {
     //
     // Use these function carefully... they return malloc'd blocks of
     // memory that get inherited by Python.
-    
+
     float* get_left_buffer(int &size, bool clear) { return malloc_and_copy(m_left_buffer, size, clear); }
     float* get_right_buffer(int &size, bool clear) { return malloc_and_copy(m_right_buffer, size, clear); }
     float* get_avg_buffer(int &size, bool clear) { return malloc_and_copy(m_avg_buffer, size, clear); }

@@ -32,7 +32,7 @@ class ControlPoint;
 class OutputSettings : public QMainWindow, private Ui::OutputSettingsDLG
 {
 	Q_OBJECT
-	
+
 public:
 	output_config_t cfg;
 	OutputSettings(QWidget *parent = 0);
@@ -61,7 +61,7 @@ public slots:
 
 	void resizeEvent (QResizeEvent * event);
 	void showEvent (QShowEvent * event);
-	
+
 	void pointMoved(ControlPoint *pt);
 
 private:
@@ -85,7 +85,7 @@ class ControlPoint : public QGraphicsEllipseItem
 public:
 	OutputSettings *form;
 	ControlPoint();
-	
+
 private:
 	QVariant itemChange (GraphicsItemChange change, const QVariant & value);
 };

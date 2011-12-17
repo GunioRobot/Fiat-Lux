@@ -17,7 +17,7 @@ along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
-// 
+//
 // start_dwell - The number of points that are added at the beginning
 //               of each point or path.  These are added by
 //               point_to(), line_to(), and bezier_to().
@@ -194,7 +194,7 @@ static int process (nframes_t nframes, void *arg)
     memset(o_ar, 0, nframes * sizeof(sample_t));
     return 0;
   }
-  
+
   while(nframes) {
     if (out_point == -1) {
       if (!first_output_frame) {
@@ -239,7 +239,7 @@ static int process (nframes_t nframes, void *arg)
 
       //      *o_al++ = frames[crbuf].audio_l[out_point];
       //      *o_ar++ = frames[crbuf].audio_r[out_point];
-      
+
       if (subframe_counter + mul >= floor(subframe_counter) + 1)
         out_point++;
       subframe_counter += mul;
@@ -287,7 +287,7 @@ int olInit(int buffer_count, int max_points)
   out_point = -1;
   first_time_full = 0;
   first_output_frame = 0;
- 
+
   // Set up current frame for drawing
   memset(&wframe, 0, sizeof(Frame));
   wframe.objmax = 16;
@@ -478,7 +478,7 @@ static void recurse_bezier(float x1, float y1, float x2, float y2, float x3, flo
     olLog("Bezier recurse error: %f,%f %f,%f %f,%f %f,%f\n", x0, y0, x1, y1, x2, y2, x3, y3);
     return;
   }
-	
+
   float dx = x3-x0;
   float dy = y3-y0;
   float distance = fmaxf(fabsf(dx),fabsf(dy));
@@ -618,7 +618,7 @@ void olEnd(void)
   Point *last = dstate.curobj->points + dstate.curobj->pointcnt - 1;
   for (i=0; i<params.end_dwell; i++)
     addpoint(last->x,last->y,last->color);
-  
+
   // Run the pixel shader, if any.
   if(pshader) {
     for (i=0; i<dstate.curobj->pointcnt; i++) {
@@ -627,8 +627,8 @@ void olEnd(void)
   }
 
   // Check to see if any of the points are contained in the x,y : [-1, 1]
-  // bounding box.  If they are, then we add them to the current frame's 
-  // object count.  
+  // bounding box.  If they are, then we add them to the current frame's
+  // object count.
   int nl=0,nr=0,nu=0,nd=0;
   for (i=0; i<dstate.curobj->pointcnt; i++) {
     if (!dstate.curobj->points[i].color)
@@ -859,13 +859,13 @@ float olRenderFrame(int max_fps)
     int in_count = count;
     int out_count = params.max_framelen;
     check_points(count);
-    
+
     Point *pin = frames[cwbuf].points;
     Point *pout = &pin[in_count];
-    
+
     float pos = 0;
     float delta = count / (float)out_count;
-    
+
     count = 0;
     while (pos < (in_count - 1)) {
       int ipos = pos;
@@ -886,7 +886,7 @@ float olRenderFrame(int max_fps)
       pout++;
       count++;
     }
-    
+
     memcpy(pin, &pin[in_count], count * sizeof(*pin));
     frames[cwbuf].pnext = count;
     check_points(0);
@@ -910,7 +910,7 @@ float olRenderFrame(int max_fps)
     last_info.padding_points++;
   }
   frames[cwbuf].pnext = count;
-  
+
   // Render he data using the audio callback (or using the built-in jack process.
   if (audiocb) {
     audiocb(frames[cwbuf].audio_l, frames[cwbuf].audio_r, count);
@@ -1109,18 +1109,18 @@ void olTransformVertex3(float *x, float *y, float *z)
   py = mtx3d[1][0]**x + mtx3d[1][1]**y + mtx3d[1][2]**z + mtx3d[1][3];
   pz = mtx3d[2][0]**x + mtx3d[2][1]**y + mtx3d[2][2]**z + mtx3d[2][3];
   pw = mtx3d[3][0]**x + mtx3d[3][1]**y + mtx3d[3][2]**z + mtx3d[3][3];
-  
+
   px /= pw;
   py /= pw;
   pz /= pw;
-  
+
   *x = px;
   *y = py;
   *z = pz;
 }
 
 
-void olVertex3(float x, float y, float z) 
+void olVertex3(float x, float y, float z)
 {
   uint32_t color = curcol;
   if(v3shader)
@@ -1176,7 +1176,7 @@ void olColor3(float red, float green, float blue)
   curcol = (r<<16) | (g<<8) | b;
 }
 
-void olColor(uint32_t color) 
+void olColor(uint32_t color)
 {
   curcol = color;
 }

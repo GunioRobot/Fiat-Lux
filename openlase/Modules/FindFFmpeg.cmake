@@ -107,7 +107,7 @@ endif (NOT WIN32)
     endif (FFmpeg_FIND_REQUIRED)
   endif (FFMPEG_FOUND)
 
-  mark_as_advanced(AVCODEC_LIBRARIES 
+  mark_as_advanced(AVCODEC_LIBRARIES
                    AVFORMAT_LIBRARIES
                    AVUTIL_LIBRARIES
                    FFMPEG_INCLUDE_DIR

@@ -24,7 +24,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301  USA
 #include <unistd.h>
 #include <string.h>
 #include <stdlib.h>
-#include <iostream> 
+#include <iostream>
 using namespace std;
 
 #include <jack/jack.h>
@@ -106,13 +106,13 @@ void jack_shutdown (void *arg)
 int main (int argc, char *argv[])
 {
 	jack_client_t *client;
-    
+
     printf("hello world");
 	if ((client = jack_client_new ("otherscope")) == 0) {
 		fprintf (stderr, "jack server not running?\n");
 		return 1;
 	}
-	
+
 	jack_set_process_callback (client, process, 0);
 	jack_set_buffer_size_callback (client, bufsize, 0);
 	jack_set_sample_rate_callback (client, srate, 0);
@@ -136,7 +136,7 @@ int main (int argc, char *argv[])
     } else {
         cout << ports[0] << "\n";
     }
-  */  
+  */
 
     cout << jack_connect(client, "otherscope:out_x","simulator:in_x") << "\n";
     cout << jack_connect(client, "otherscope:out_y","simulator:in_y") << "\n";

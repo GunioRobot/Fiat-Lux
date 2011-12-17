@@ -103,7 +103,7 @@ if sys.platform == "darwin":
     graphics_env.Append(LINKFLAGS = " -framework OpenGL -framework AGL -framework Syphon -framework AppKit")
 else:
     print "WARNING: There is no syphon support for linux.  The build may fail."
-    
+
 graphics_lib_sources = graphics_sources
 graphics_lib_target  = "xenon_graphics"
 graphics_lib = BuildSupport.Library(graphics_env, target = graphics_lib_target, source = graphics_lib_sources)

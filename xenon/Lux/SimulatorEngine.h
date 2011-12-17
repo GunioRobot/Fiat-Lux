@@ -20,15 +20,15 @@ namespace lux {
     bufsample_t m_buffer[LUX_SIMULATOR_BUF_SAMPLES];
     int m_psize;
     int temp;
-    
+
   public:
 
     SimulatorEngine(std::string name);
-    virtual ~SimulatorEngine() {} 
+    virtual ~SimulatorEngine() {}
 
     // Called by Jack as new audio frames arrive
     virtual int process_callback(nframes_t nframes);
-    
+
     // Methods for drawing in an OpenGL context
     void laser_color(float r, float g, float b, float ascale);
     void draw_gl();

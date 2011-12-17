@@ -254,7 +254,7 @@ int main (int argc, char *argv[])
 
 	float nps = 0;
 	avgnotes = 5;
-	
+
 	while(1) {
 		olLoadIdentity();
 

@@ -11,7 +11,7 @@
 
   // Light-weight wrapper for the Jack audio library.
   class MagicScope {
-  
+
     jack_client_t* m_client;
     jack_port_t *m_in_l;
     jack_port_t *m_in_r;
@@ -29,7 +29,7 @@
       nframes_t m_sample_rate;
       nframes_t m_buffer_size;
       std::map<std::string, jack_port_t*> m_ports;
-    
+
     public:
 
       // Each instance is a "client" that is registered with Jack.
@@ -66,7 +66,7 @@
       virtual int buffer_size_callback(nframes_t nframes);
 
       virtual int sample_rate_callback(nframes_t nframes);
-      
+
       virtual void shutdown_callback();
 
   };

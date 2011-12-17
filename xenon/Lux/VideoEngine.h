@@ -9,7 +9,7 @@
 
 #ifdef __APPLE__
 #include <xenon/Graphics/SyphonClient.h>
-#endif 
+#endif
 
 // OpenCV
 #include <opencv/cv.h>
@@ -28,7 +28,7 @@ namespace lux {
     // Contouring parameters
     double m_contour_threshold;       // 0.2
     double m_contour_blur_sigma;      // 1.5
-    double m_contour_min_area;        // 100 
+    double m_contour_min_area;        // 100
     double m_contour_max_area;        // 640*480
     double m_contour_num_considered;  // 10
     int m_contour_mode;               // CV_RETR_EXTERNAL**  or CV_RETR_EXTERNAL
@@ -40,17 +40,17 @@ namespace lux {
     bool m_initialized;
 
     std::vector<std::vector<xenon::Vector2> > m_contours_to_draw;
-    
+
 #ifdef __APPLE__
     xenon::graphics::XenonSyphonClient m_syphon_client;
-#endif 
+#endif
 
     void add_contours(cv::Mat image, std::vector<std::vector<cv::Point> > &contours, float threshold);
 
   public:
 
     VideoEngine(std::string application_name, std::string server_name);
-    virtual ~VideoEngine() {} 
+    virtual ~VideoEngine() {}
 
     void draw_gl();
     void draw_lasers();

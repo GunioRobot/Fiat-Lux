@@ -69,11 +69,11 @@ static void transform(sample_t *ox, sample_t *oy)
 	float x,y,w;
 	x = *ox;
 	y = *oy;
-	
+
 	*ox = cfg->transform[0][0]*x + cfg->transform[0][1]*y + cfg->transform[0][2];
 	*oy = cfg->transform[1][0]*x + cfg->transform[1][1]*y + cfg->transform[1][2];
 	w = cfg->transform[2][0]*x + cfg->transform[2][1]*y + cfg->transform[2][2];
-	
+
 	*ox /= w;
 	*oy /= w;
 }
@@ -126,7 +126,7 @@ static int process (nframes_t nframes, void *arg)
 	sample_t *o_y = (sample_t *) jack_port_get_buffer (out_y, nframes);
 	sample_t *o_g = (sample_t *) jack_port_get_buffer (out_g, nframes);
 	sample_t *o_e = (sample_t *) jack_port_get_buffer (out_e, nframes);
-	
+
 	sample_t *i_x = (sample_t *) jack_port_get_buffer (in_x, nframes);
 	sample_t *i_y = (sample_t *) jack_port_get_buffer (in_y, nframes);
 	sample_t *i_g = (sample_t *) jack_port_get_buffer (in_g, nframes);
@@ -165,7 +165,7 @@ static int process (nframes_t nframes, void *arg)
 			x *= cfg->size;
 			y *= cfg->size;
 		}
-		
+
 		if (cfg->blank_flags & BLANK_INVERT)
 			g = 1.0f - g;
 		if (!(cfg->blank_flags & BLANK_ENABLE))
@@ -184,9 +184,9 @@ static int process (nframes_t nframes, void *arg)
 		} else {
 		    frames_dead = 0;
 		}
-		
+
 		filter(&x, &y);
-		
+
 		*o_x++ = x;
 		*o_y++ = y;
 		buf_g[ibuf_g] = g;
@@ -229,7 +229,7 @@ int main (int argc, char *argv[])
 
 	QApplication app(argc, argv);
 	OutputSettings settings;
-	
+
 	cfg = &settings.cfg;
 
 	if ((client = jack_client_new ("output")) == 0) {

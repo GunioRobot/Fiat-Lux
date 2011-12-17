@@ -108,7 +108,7 @@ static void alloc_bufs(OLTraceCtx *ctx)
 	}
 
 	ctx->tracebuf = malloc(ctx->p.width * ctx->p.height * sizeof(*ctx->tracebuf));
-	memset(ctx->tracebuf, 0, ctx->p.width * ctx->p.height * sizeof(*ctx->tracebuf));	
+	memset(ctx->tracebuf, 0, ctx->p.width * ctx->p.height * sizeof(*ctx->tracebuf));
 
 	ctx->sb_size = ctx->p.width * 16;
 	ctx->sb = malloc(ctx->sb_size * sizeof(*ctx->sb));
@@ -488,7 +488,7 @@ static void find_edges_thresh(OLTraceCtx *ctx, uint8_t *src, unsigned int stride
 static void find_edges_canny(OLTraceCtx *ctx, uint8_t *src, unsigned int stride)
 {
 	icoord x, y;
-	
+
 	unsigned int high_t = ctx->p.threshold;
 	unsigned int low_t = ctx->p.threshold2;
 	if (low_t == 0)
@@ -498,7 +498,7 @@ static void find_edges_canny(OLTraceCtx *ctx, uint8_t *src, unsigned int stride)
 		low_t = high_t;
 		high_t = tmp;
 	}
-	
+
 	if (src != ctx->sibuf) {
 		uint8_t *p = ctx->sibuf + ctx->aw;
 		for (y = 0; y < ctx->p.height; y++) {

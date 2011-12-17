@@ -122,7 +122,7 @@ void circlescope_render(void *ctx, float time, float state)
 {
 	float pvol = (1-fabsf(state)*1.3);
 	volume = pvol < 0 ? 0 : 0.8 * pvol;
-	
+
 	olLoadIdentity();
 
 	if (got_samples == DRAW_SAMPLES) {
@@ -135,7 +135,7 @@ void circlescope_render(void *ctx, float time, float state)
 	}
 
 	int i;
-	
+
 	olBegin(OL_POINTS);
 	for (i=0; i<DRAW_SAMPLES; i++) {
 		double w = 523.251131f / 4.0f * (2*M_PI) / 48000;
@@ -150,7 +150,7 @@ void circlescope_render(void *ctx, float time, float state)
 		olVertex(cosf(pos) * val, sinf(pos) * val, C_WHITE);
 	}
 	olEnd();
-		
+
 
 	olSetAudioCallback(moreaudio);
 }

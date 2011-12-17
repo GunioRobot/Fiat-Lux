@@ -1,7 +1,7 @@
 /*
     SyphonNameboundClient.m
         Syphon (Implementations)
-        
+
     Copyright 2010 bangnoise (Tom Butterworth) & vade (Anton Marini).
     All rights reserved.
 
@@ -26,7 +26,7 @@
     (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
- 
+
 #import <xenon/Graphics/SyphonNameboundClient.h>
 
 @interface SyphonNameboundClient (Private)
@@ -133,29 +133,29 @@
 {
   SyphonClient *newClient = [client retain];
   SyphonClient *oldClient;
-        
+
   if (!isLocked) OSSpinLockLock(&_lock);
   oldClient = _client;
   _client = newClient;
   if (!isLocked) OSSpinLockUnlock(&_lock);
-        
+
   // If we were registered for notifications and no longer require them
   // remove ourself from the notification center
-        
+
   if (oldClient == nil && newClient != nil)
     {
       [[NSNotificationCenter defaultCenter] removeObserver:self name:SyphonServerAnnounceNotification object:nil];
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleServerRetire:) name:SyphonServerRetireNotification object:nil];
     }
-        
+
   // If we weren't registered already, but need to register now, do so
-        
+
   if (newClient == nil && oldClient != nil)
     {
       [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(handleServerAnnounce:) name:SyphonServerAnnounceNotification object:nil];
       [[NSNotificationCenter defaultCenter] removeObserver:self name:SyphonServerRetireNotification object:nil];
     }
-        
+
   // Release the old client
   [oldClient release];
 }
@@ -164,7 +164,7 @@
 {
   NSString *searchName = self.name;
   NSString *searchApp = self.appName;
-        
+
   if ([searchName length] == 0)
     {
       searchName = nil;
@@ -186,7 +186,7 @@
 - (void)setClientFromSearchHavingLock:(BOOL)isLocked
 {
   SyphonClient *newClient = nil;
-        
+
   if (!isLocked) OSSpinLockLock(&_lock);
   if ([_name length] > 0 || [_appname length] > 0) {
     //    NSLog(@"Searching for %@, %@\n", _name, _appname);
@@ -214,9 +214,9 @@
   NSDictionary *newInfo = [notification object];
   if (![self parametersMatchDescription:[_client serverDescription]]
       && [self parametersMatchDescription:newInfo]) {
-    SyphonClient *newClient = [[SyphonClient alloc] initWithServerDescription:newInfo options:nil 
+    SyphonClient *newClient = [[SyphonClient alloc] initWithServerDescription:newInfo options:nil
                                newFrameHandler:nil];
-                
+
     [self setClient:newClient havingLock:NO];
     [newClient release];
   }
@@ -228,7 +228,7 @@
   NSDictionary *currentServer = [_client serverDescription];
   // It's possible our client hasn't received the update yet, so we can't trust its server description
   // so check if the new update is for our client...
-  if ([[currentServer objectForKey:SyphonServerDescriptionUUIDKey] 
+  if ([[currentServer objectForKey:SyphonServerDescriptionUUIDKey]
        isEqualToString:[newInfo objectForKey:SyphonServerDescriptionUUIDKey]])
     {
       // ...and if so, check to see if our parameters no longer describe the server
@@ -236,12 +236,12 @@
         {
           [self setClient:nil havingLock:NO];
         }
-                
+
     }
   // If we don't have a matching client but this client's new details match, then set up a new client
   if (_client == nil && [self parametersMatchDescription:newInfo]) {
     SyphonClient *newClient = [[SyphonClient alloc] initWithServerDescription:newInfo options:nil newFrameHandler:nil];
-                
+
     [self setClient:newClient havingLock:NO];
     [newClient release];
   }
@@ -251,7 +251,7 @@
   //  NSLog(@"***SERVER RETIRE\n");
   NSString *retiringUUID = [[notification object] objectForKey:SyphonServerDescriptionUUIDKey];
   NSString *ourUUID = [[_client serverDescription] objectForKey:SyphonServerDescriptionUUIDKey];
-        
+
   if ([retiringUUID isEqualToString:ourUUID]) {
     [self setClientFromSearchHavingLock:NO];
   }

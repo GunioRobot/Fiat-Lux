@@ -37,7 +37,7 @@ void lux::AudioClient::add_output_port(std::string const& name) {
 
 void lux::AudioClient::connect_ports(std::string const& src_port, std::string const& dst_port) {
   if (jack_connect(m_client, src_port.c_str(), dst_port.c_str())) {
-    xenon_throw( LogicErr() << "AudioClient::connect_ports - could not connect " 
+    xenon_throw( LogicErr() << "AudioClient::connect_ports - could not connect "
                  << src_port << " to " << dst_port << "." );
   }
 }

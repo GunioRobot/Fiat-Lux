@@ -24,7 +24,7 @@ xenon::graphics::XenonSyphonClient::XenonSyphonClient() {
 
 xenon::graphics::XenonSyphonClient::~XenonSyphonClient() {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-  
+
   [static_cast<SyphonNameboundClient*>(mClient) release];
   [pool drain];
 }
@@ -32,8 +32,8 @@ xenon::graphics::XenonSyphonClient::~XenonSyphonClient() {
 void xenon::graphics::XenonSyphonClient::setup() {
   // Need pool
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-  
-  mClient = [[SyphonNameboundClient alloc] init]; 
+
+  mClient = [[SyphonNameboundClient alloc] init];
   bSetup = true;
   [pool drain];
 }
@@ -55,7 +55,7 @@ void xenon::graphics::XenonSyphonClient::setServerName(std::string serverName) {
   if(bSetup) {
     [static_cast<SyphonNameboundClient*>(mClient) setName:name];
   }
-  
+
   [pool drain];
 }
 
@@ -63,13 +63,13 @@ void xenon::graphics::XenonSyphonClient::bind() {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
   if(bSetup) {
-    
+
     [static_cast<SyphonNameboundClient*>(mClient) lockClient];
     SyphonClient *client = [static_cast<SyphonNameboundClient*>(mClient) client];
-    
+
     latestImage = [client newFrameImageForContext:CGLGetCurrentContext()];
     NSSize texSize = [static_cast<SyphonImage*>(latestImage) textureSize];
-    
+
     // we now have to manually make our ofTexture's ofTextureData a proxy to our SyphonImage
     mTex.texData.textureID = [static_cast<SyphonImage*>(latestImage) textureName];
     mTex.texData.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
@@ -83,7 +83,7 @@ void xenon::graphics::XenonSyphonClient::bind() {
     mTex.texData.pixelType = GL_UNSIGNED_BYTE;
     mTex.texData.bFlipTexture = NO;
     mTex.texData.bAllocated = YES;
-    
+
     mTex.bind();
   }
   [pool drain];
@@ -96,14 +96,14 @@ void xenon::graphics::XenonSyphonClient::bind() {
 //   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
 
 //   if(bSetup) {
-    
+
 //     [static_cast<SyphonNameboundClient*>(mClient) lockClient];
 //     SyphonClient *client = [static_cast<SyphonNameboundClient*>(mClient) client];
 
 //     latestImage = [client newFrameImageForContext:CGLGetCurrentContext()];
 //     NSSize texSize = [static_cast<SyphonImage*>(latestImage) textureSize];
 //     NSLog(@"DRAWING: %f %f\n", texSize.width, texSize.height);
-    
+
 //     // we now have to manually make our ofTexture's ofTextureData a proxy to our SyphonImage
 //     mTex.texData.textureID = [static_cast<SyphonImage*>(latestImage) textureName];
 //     mTex.texData.textureTarget = GL_TEXTURE_RECTANGLE_ARB;
@@ -117,7 +117,7 @@ void xenon::graphics::XenonSyphonClient::bind() {
 //     mTex.texData.pixelType = GL_UNSIGNED_BYTE;
 //     mTex.texData.bFlipTexture = NO;
 //     mTex.texData.bAllocated = YES;
-    
+
 //     mTex.draw(0,0,1,1);
 
 //     // glEnable(GL_TEXTURE_RECTANGLE_ARB);
@@ -129,7 +129,7 @@ void xenon::graphics::XenonSyphonClient::bind() {
 //     // glTexCoord2f(texSize.width, 0.0);            glVertex3f(1.0, -0.5, 0.0);
 //     // glEnd();
 //     // glDisable(GL_TEXTURE_RECTANGLE_ARB);
-    
+
 //     [static_cast<SyphonNameboundClient*>(mClient) unlockClient];
 //     [static_cast<SyphonImage*>(latestImage) release];
 //     latestImage = nil;
@@ -139,7 +139,7 @@ void xenon::graphics::XenonSyphonClient::bind() {
 
 void xenon::graphics::XenonSyphonClient::unbind() {
   NSAutoreleasePool* pool = [[NSAutoreleasePool alloc] init];
-    
+
   if(bSetup) {
     mTex.unbind();
 
@@ -161,7 +161,7 @@ void xenon::graphics::XenonSyphonClient::draw(float x, float y) {
 }
 
 int xenon::graphics::XenonSyphonClient::getHeight() {
-  return mTex.texData.height; 
+  return mTex.texData.height;
 }
 
 int xenon::graphics::XenonSyphonClient::getWidth() {

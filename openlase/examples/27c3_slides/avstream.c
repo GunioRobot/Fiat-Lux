@@ -121,7 +121,7 @@ int video_open(VContext **octx, char *file)
 
 	if (!inited)
 		avstream_init();
-	
+
 	ctx = malloc(sizeof(VContext));
 
 	if (av_open_input_file(&ctx->av.formatctx, file, NULL, 0, NULL) != 0)

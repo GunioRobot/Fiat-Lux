@@ -21,25 +21,25 @@ namespace graphics {
     int width, height;
     bool bSetup;
     std::string name;
-    
+
   public:
     XenonSyphonClient();
     ~XenonSyphonClient();
-    
+
     void setup ();
     void setApplicationName(std::string appName);
     void setServerName(std::string serverName);
-    
+
     void bind();
     void unbind();
     void draw();
 
     int getHeight();
     int getWidth();
-    
+
     void draw(float x, float y, float w, float h);
     void draw(float x, float y);
-    
+
   };
 }} // namespace xenon::graphics
 

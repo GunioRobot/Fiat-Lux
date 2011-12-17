@@ -14,7 +14,7 @@ namespace lux {
 
   // ---------------------------------------------------------------------------
   //                              Output Engine
-  // 
+  //
   // This class conditions the audio before it heads off to the laser
   // amp.  It takes care of geometric corrections, overall brightness
   // adjustment & calibration, and it generates the safety interlock.
@@ -65,7 +65,7 @@ namespace lux {
     void transform(sample_t *ox, sample_t *oy);
 
   public:
-    
+
     OutputEngine(std::string const& jack_endpoint_name);
     virtual ~OutputEngine();
 

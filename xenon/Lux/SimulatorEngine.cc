@@ -11,7 +11,7 @@
 #include <GL/glu.h>
 #endif
 
-lux::SimulatorEngine::SimulatorEngine(std::string name) : 
+lux::SimulatorEngine::SimulatorEngine(std::string name) :
   AudioClient(name), m_buf_widx(0), m_psize(2) {
 
   this->add_input_port("in_x");
@@ -20,19 +20,19 @@ lux::SimulatorEngine::SimulatorEngine(std::string name) :
   this->add_input_port("in_g");
   this->add_input_port("in_b");
   this->add_input_port("in_a");
-  
+
 // #ifdef __APPLE__
 //   AGLContext aglContext;
 //   aglContext = aglGetCurrentContext();
 //   GLint swapInt = 1;
 //   aglSetInteger(aglContext, AGL_SWAP_INTERVAL, &swapInt);
 // #endif
-  
+
 }
 
  void lux::SimulatorEngine::laser_color(float r, float g, float b, float ascale) {
 
-   // This was the original laser_color code.  
+   // This was the original laser_color code.
    //   float r, b;
    //   r = b = 0;
    //   if (g < 0)
@@ -44,7 +44,7 @@ lux::SimulatorEngine::SimulatorEngine(std::string name) :
    //     g = 1.0;
    //   }
    //   glColor4f(r, 1, b, g*ascale);
-   
+
   glColor4f(r, g, b, ascale);
 }
 
@@ -57,14 +57,14 @@ void lux::SimulatorEngine::draw_gl() {
   glPointSize(m_psize);
 
   int ridx = (m_buf_widx - LUX_SIMULATOR_HIST_SAMPLES + LUX_SIMULATOR_BUF_SAMPLES) % LUX_SIMULATOR_BUF_SAMPLES;
-        
+
   float last_x, last_y, last_r, last_g, last_b;
   last_x = last_y = last_r = last_g = last_b = 0;
 
   float rdelay[2] = {0,0};
   float gdelay[2] = {0,0};
   float bdelay[2] = {0,0};
-  
+
   for (int i = 0; i<LUX_SIMULATOR_HIST_SAMPLES; i++) {
     float r, g, b;
 
@@ -81,7 +81,7 @@ void lux::SimulatorEngine::draw_gl() {
     s.r = rdelay[(i+1)%2];
     s.g = gdelay[(i+1)%2];
     s.b = bdelay[(i+1)%2];
-    
+
     // Compute distance traveled since from last galvo position
     float d = sqrtf((s.x-last_x)*(s.x-last_x) + (s.y-last_y)*(s.y-last_y));
     if (d == 0)
@@ -89,12 +89,12 @@ void lux::SimulatorEngine::draw_gl() {
     float dfactor = 0.01/d;
     if (dfactor > 1.5)
       dfactor = 1.5;
-    
-    
+
+
     int age = LUX_SIMULATOR_HIST_SAMPLES-i;
     float factor = (LUX_SIMULATOR_HIST_SAMPLES-age)/(float)LUX_SIMULATOR_HIST_SAMPLES;
     factor = factor*factor;
-    
+
     if (fabsf(s.x-last_x) < 0.001 && fabsf(s.y-last_y) < 0.001) {
 
       // If the spot has not moved at all, draw points at the vertices
@@ -120,13 +120,13 @@ void lux::SimulatorEngine::draw_gl() {
       glVertex3f(s.x, s.y, 0);
       glEnd();
     }
-    
+
     last_x = s.x;
     last_y = s.y;
     last_r = r;
     last_g = g;
     last_b = b;
-    
+
     ridx++;
     if (ridx >= LUX_SIMULATOR_BUF_SAMPLES)
       ridx = 0;
@@ -161,12 +161,12 @@ int lux::SimulatorEngine::process_callback(nframes_t nframes) {
     m_buffer[m_buf_widx].g = *i_g++;
     m_buffer[m_buf_widx].b = *i_b++;
     m_buffer[m_buf_widx].a = *i_a++;
-    
+
     m_buf_widx++;
     if (m_buf_widx >= LUX_SIMULATOR_BUF_SAMPLES)
       m_buf_widx = 0;
   }
-  
+
   return 0;
 }
 

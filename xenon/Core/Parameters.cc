@@ -20,7 +20,7 @@
 std::string prefix_from_filename(std::string const& filename) {
   std::string result = filename;
   int index = result.rfind(".");
-  if (index != -1) 
+  if (index != -1)
     result.erase(index, result.size());
   return result;
 }
@@ -70,19 +70,19 @@ void VectorSpaceDimension::set_readonly(double val) {
 // Automation con be overriden if a user starts to control this
 // parameter with a control.
 void VectorSpaceDimension::set_automate(double val) {
-  
-  // Update the state of the automation override.  
+
+  // Update the state of the automation override.
   if (m_controller_timeout > 0) {
     double current_time = xenon::xenon_time();
     double elapsed = current_time - m_last_poll_time;
     m_last_poll_time = current_time;
     m_controller_timeout -= elapsed;
   }
-  
+
   if (m_controller_timeout < 0) {
     m_control_mode = eAutomation;
   }
-  
+
   // If the controller timeout has fully elapsed, we switch back
   // into automation mode and accept this value.  Otherwise we
   // ignore it.
@@ -93,24 +93,24 @@ void VectorSpaceDimension::set_automate(double val) {
 // Set the value of the parameter using a human operated control.
 // Controls can overide
 void VectorSpaceDimension::set_control(double val) {
-  
+
   // Switch over into controller mode
   m_last_poll_time = xenon::xenon_time();
   m_controller_timeout = 5.0; // 5 second timeout for now (for testing)
   m_control_mode = eController;
-  
+
   // And set the value
   set_internal(val);
 }
 
 // Force the parameter to return to automated control.
-void VectorSpaceDimension::automate() { 
-  m_controller_timeout = 0; 
+void VectorSpaceDimension::automate() {
+  m_controller_timeout = 0;
   m_control_mode = eAutomation;
 }
 
 // Get the current value for a parameter
-// 
+//
 // Can be overriden by a subclass to, e.g., return an interpolated
 // or animated value.
 double VectorSpaceDimension::operator()() {
@@ -118,7 +118,7 @@ double VectorSpaceDimension::operator()() {
 }
 
 // Reset the parameter to the default value;
-void VectorSpaceDimension::reset() { 
+void VectorSpaceDimension::reset() {
   if (!m_read_only)
     m_value = m_default_value;
 }
@@ -127,9 +127,9 @@ void VectorSpaceDimension::reset() {
 // XenonParameters
 // ---------------------------------------------------------------------
 
-void XenonParameters::add_parameter(std::string name, 
-                                 bool read_only, 
-                                 float default_value, 
+void XenonParameters::add_parameter(std::string name,
+                                 bool read_only,
+                                 float default_value,
                                  std::string description) {
   VectorSpaceDimension p(name, description, default_value, read_only);
 
@@ -139,21 +139,21 @@ void XenonParameters::add_parameter(std::string name,
 
 void XenonParameters::set_value(std::string name, float val) {
   xenon::Mutex::Lock lock(m_mutex);
-  
+
   std::map<std::string, VectorSpaceDimension>::iterator match = m_parameters.find(name);
   if(match == m_parameters.end())
     std::cout << "Warning in Parameter::set_value() -- Unknown parameter: " << name << "\n";
-   else 
+   else
     match->second.set_automate(val);
 }
 
 void XenonParameters::set_readonly(std::string name, float val) {
   xenon::Mutex::Lock lock(m_mutex);
-  
+
   std::map<std::string, VectorSpaceDimension>::iterator match = m_parameters.find(name);
   if(match == m_parameters.end())
     std::cout << "Warning in Parameter::set_value() -- Unknown parameter: " << name << "\n";
-   else 
+   else
     match->second.set_readonly(val);
 }
 
@@ -169,7 +169,7 @@ float XenonParameters::get_value(std::string name) {
     std::cout << "Warning in Parameter::get_value() -- Unknown parameter: " << name << "\n";
     return 0.0;
   }
-  else 
+  else
     return (match->second)();
 }
 
@@ -181,23 +181,23 @@ std::string XenonParameters::get_description(std::string name) {
     std::cout << "Warning in Parameter::get_description() -- Unknown parameter: " << name << "\n";
     return "";
   }
-  else 
+  else
     return (match->second).description();
 }
 
 void XenonParameters::reset_value(std::string name) {
   xenon::Mutex::Lock lock(m_mutex);
-  
+
   std::map<std::string, VectorSpaceDimension>::iterator match = m_parameters.find(name);
   if(match == m_parameters.end())
     std::cout << "Warning in Parameter::reset_value() -- Unknown parameter: " << name << "\n";
-  else 
+  else
     match->second.reset();
 }
 
 void XenonParameters::reset_all() {
   xenon::Mutex::Lock lock(m_mutex);
-  
+
   std::map<std::string, VectorSpaceDimension>::iterator iter = m_parameters.begin();
   while (iter != m_parameters.end()) {
     iter->second.reset();
@@ -217,11 +217,11 @@ std::list<std::string> XenonParameters::param_list() {
   return result;
 }
 
-void XenonParameters::print_list() {    
+void XenonParameters::print_list() {
   xenon::Mutex::Lock lock(m_mutex);
 
   std::cout << "Here are the knobs you can tweak:\n\n";
-    
+
   std::map<std::string, VectorSpaceDimension>::iterator iter = m_parameters.begin();
   while (iter != m_parameters.end()) {
     std::cout << "\tName: " << iter->second.name();

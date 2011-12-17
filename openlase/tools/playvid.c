@@ -465,7 +465,7 @@ int main (int argc, char *argv[])
       continue;
     }
     vidtime += frametime;
-          
+
     int thresh;
     int obj;
     int bsum = 0;
@@ -485,17 +485,17 @@ int main (int argc, char *argv[])
       bg_white = 0;
     if (!bg_white && bsum > sw_light)
       bg_white = 1;
-          
+
     if (bg_white)
       thresh = thresh_light;
     else
       thresh = thresh_dark;
-          
+
     tparams.threshold = thresh;
     olTraceReInit(trace_ctx, &tparams);
     olTraceFree(&result);
     obj = olTrace(trace_ctx, frame->data[0], frame->linesize[0], &result);
-          
+
     do {
       int i, j;
       for (i = 0; i < result.count; i++) {
@@ -512,7 +512,7 @@ int main (int argc, char *argv[])
         }
         olEnd();
       }
-                  
+
       ftime = olRenderFrame(200);
       olGetFrameInfo(&info);
       frames++;

@@ -17,7 +17,7 @@
 #include <opencv/highgui.h>
 
 // Libol
-extern "C" { 
+extern "C" {
   #include "libol.h"
 }
 
@@ -33,7 +33,7 @@ xenon::graphics::Texture testTexture;
 void makeCheckImage(void)
 {
    int i, j, c;
-    
+
    for (i = 0; i < checkImageHeight; i++) {
       for (j = 0; j < checkImageWidth; j++) {
          c = ((((i&0x8)==0)^((j&0x8))==0))*255;
@@ -99,8 +99,8 @@ void lux::VideoEngine::resize_gl(int width, int height) {
 
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_framebuffer0);
   glBindTexture(GL_TEXTURE_2D, m_framebuffer_texture0);
-  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, 
-               m_framebuffer_width, m_framebuffer_height, 
+  glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA,
+               m_framebuffer_width, m_framebuffer_height,
                0, GL_BGRA, GL_UNSIGNED_BYTE, NULL);
   glFramebufferTexture2DEXT(GL_FRAMEBUFFER_EXT, GL_COLOR_ATTACHMENT0_EXT,
                             GL_TEXTURE_2D, m_framebuffer_texture0, 0);
@@ -128,7 +128,7 @@ template <class T>
 bool compareCvContours(T a, T b) {
   if (a.size() > b.size())
     return true;
-  else 
+  else
     return false;
 }
 
@@ -138,14 +138,14 @@ void lux::VideoEngine::add_contours(cv::Mat image, std::vector<std::vector<cv::P
   cv::Mat contour_input = image.clone();
 
   if (m_edge_detection_mode == 1) {        // ADAPTIVE_THRESHOLD
-    cv::adaptiveThreshold(contour_input, contour_input, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C, 
+    cv::adaptiveThreshold(contour_input, contour_input, 255, cv::ADAPTIVE_THRESH_GAUSSIAN_C,
                           cv::THRESH_BINARY, 3, threshold * 2 - 1.0);
   } else if (m_edge_detection_mode == 2) { // CANNY
     cv::Canny(contour_input, contour_input, 0.5 * 255 * threshold, 255 * threshold);
   } else {                                 // THRESHOLD
     cv::threshold(contour_input, contour_input, 255 * threshold, 255, cv::THRESH_BINARY);
   }
-  
+
   // OpenCV clobbers the contour image, so we make a copy of it here.
   std::vector<std::vector<cv::Point> > new_contours;
   cv::findContours(contour_input, new_contours, m_contour_mode, m_contour_method);
@@ -186,7 +186,7 @@ void lux::VideoEngine::draw_gl() {
 #endif
 
   // SECOND: DRAW INTO THE RENDER BUFFER (AT LOW RES) AND READ OUT THE PIXELS
-  
+
   glBindFramebufferEXT(GL_FRAMEBUFFER_EXT, m_framebuffer0);
   glDrawBuffer(GL_COLOR_ATTACHMENT0_EXT);
   glReadBuffer(GL_COLOR_ATTACHMENT0_EXT);
@@ -201,7 +201,7 @@ void lux::VideoEngine::draw_gl() {
   glClearColor(0.0,0.0,0.1,1.0);
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 #ifdef __APPLE__
-  
+
   glColor4f(1.0, 1.0, 1.0, 1.0);
   m_syphon_client.draw(-1.0,-1.0/syphon_aspect,2.0,2.0/syphon_aspect);
   //  m_syphon_client.draw(-1.0,-1.0, 2.0,2.0);
@@ -213,7 +213,7 @@ void lux::VideoEngine::draw_gl() {
                GL_BGRA, GL_UNSIGNED_BYTE, image.ptr());
 
   // Optionally, save frame to disk
-  std::ostringstream ostr;    
+  std::ostringstream ostr;
   ostr << "/tmp/lux_frame_";
   for (int i = 1; i < 5; ++i) {
     if (int(m_record_frame_number / powf(10,i)) == 0) {
@@ -232,7 +232,7 @@ void lux::VideoEngine::draw_gl() {
   cv::Mat grayscale_image;
   cvtColor(image, grayscale_image, CV_RGB2GRAY);
   cv::GaussianBlur(grayscale_image, grayscale_image, cv::Size(11,11), m_contour_blur_sigma, m_contour_blur_sigma);
-  
+
   // Average with the previous frame to smooth out the contours
   m_contour_frame_smoothing = 0.5;
   cv::Mat avg_image;
@@ -245,7 +245,7 @@ void lux::VideoEngine::draw_gl() {
   }
   //  cv::imwrite(ostr.str(), avg_image);
 
-  // Extract contours 
+  // Extract contours
   std::vector<std::vector<cv::Point> > raw_contours;
   //  std::cout << "contour " << m_contour_threshold << "\n";
   // for (float thresh = 0.05; thresh < 0.95; thresh += 0.2) {
@@ -268,7 +268,7 @@ void lux::VideoEngine::draw_gl() {
   if (subsampling_factor == 0) subsampling_factor = 1;
 
   // Clear the old points out before adding points from this frame
-  { 
+  {
     xenon::Mutex::Lock lock(m_mutex);
     m_contours_to_draw.clear();
   }
@@ -282,13 +282,13 @@ void lux::VideoEngine::draw_gl() {
 
     float area = cv::contourArea(cv::Mat(*iter));
     if( (area > m_contour_min_area) && (area < m_contour_max_area) ) {
-      
-      // Rescale the contours 
+
+      // Rescale the contours
       std::vector<xenon::Vector2> contour_2f;
       xenon::Vector2 avg_sum;
       int avg_count = 0;
       for (int i = 0; i < iter->size(); ++i) {
-        
+
         if (avg_count >= subsampling_factor) {
           xenon::Vector2 p;
           p[0] = avg_sum[0]/avg_count;
@@ -332,13 +332,13 @@ void lux::VideoEngine::draw_gl() {
   m_record_frame_number++;
 }
 
-void lux::VideoEngine::draw_lasers() {  
+void lux::VideoEngine::draw_lasers() {
 
   // olLoadIdentity3();
   // olLoadIdentity();
   // olPerspective(60, 1, 1, 100);
   // olTranslate3(0, 0, -3);
-  
+
   xenon::Mutex::Lock lock(m_mutex);
   for (int c = 0; c < m_contours_to_draw.size(); ++c) {
     olBegin(OL_LINESTRIP);
